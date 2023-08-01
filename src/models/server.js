@@ -1,6 +1,7 @@
 import {join, dirname} from 'path'
 import { fileURLToPath } from 'url'
 import userRoutes from '../routes/user.routes.js'
+import connectDb from '../db/config.js'
 import dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
@@ -15,6 +16,9 @@ class server {
         this.port = process.env.PORT
         this.pathPublic = join(dirname(fileURLToPath(import.meta.url)), '..')
 
+        //-- conectamos a la DB
+        this.conexionBD()
+        
         //middlewares
         this.middlewares()
         
@@ -22,7 +26,12 @@ class server {
         this.routes()
     }
 
-    //--metodos
+    //--metodos//--
+
+    //-- conexion a la bd
+    async conexionBD(){
+        await connectDb()
+    }
 
     //-- servimos todos los middlewares
     middlewares(){
