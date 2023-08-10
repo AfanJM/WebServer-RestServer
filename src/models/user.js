@@ -11,7 +11,7 @@ const userSchema = new Schema({
 
     img: {type: String},
 
-    role: {type: String , required: true, emun: ['ADMIN_ROLE', 'USER_ROLE']},
+    role: {type: String , required: true, emun: ['ADMIN_ROLE', 'USER_ROLE', 'VENTAS_ROLE']},
 
     state: {type: Boolean, default: true},
 
@@ -19,9 +19,11 @@ const userSchema = new Schema({
     
 })
 
-//-- sacamos el-v, password a la hora de mandarlo a imprimir
+//-- sacamos el-v, password, id a la hora de mandarlo a imprimir
 userSchema.methods.toJSON = function (){
-    const { __v , password, ...user }  = this.toObject() 
+    const { __v , password,_id,  ...user }  = this.toObject() 
+
+    user.uid = _id
 
     return user
 }

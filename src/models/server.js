@@ -1,6 +1,7 @@
 import {join, dirname} from 'path'
 import { fileURLToPath } from 'url'
 import userRoutes from '../routes/user.routes.js'
+import authRoutes from '../routes/auth.routes.js'
 import connectDb from '../db/config.js'
 import dotenv from 'dotenv'
 import express from 'express'
@@ -15,6 +16,9 @@ class server {
         this.app = express()
         this.port = process.env.PORT
         this.pathPublic = join(dirname(fileURLToPath(import.meta.url)), '..')
+
+        this.usersPath = '/api'
+        this.authPath = '/api/auth'
 
         //-- conectamos a la DB
         this.conexionBD()
@@ -42,7 +46,8 @@ class server {
 
     //--definimos las rutas que queremos
     routes() {
-        this.app.use(userRoutes)
+        this.app.use(this.authPath, authRoutes)
+        this.app.use(this.usersPath ,userRoutes)
     }
 
     //-- escuchamos el server

@@ -1,3 +1,4 @@
+import {validateJwt} from '../middlewares/validate-jwt.js'
 import { response } from "express"
 import {hash} from 'bcrypt'
 import userModel from '../models/user.js'
@@ -11,7 +12,7 @@ export const userGet = async (req, res = response) =>{
     //para que me salgan solo los usuarios activos
     const query = {state: true}
 
-    // const users = await userModel.find( query )
+    // const users = await userModel.find( query ) 
     // .limit( Number( limit ) )
     // .skip(Number( offset ) )
 
@@ -40,7 +41,7 @@ export const userPost = async (req, res) =>{
     User.password = await hash(password, 12)
 
     //-- guardamos el bd
-    await User.save()
+    await User.save() 
 
     res.json({
         User
@@ -64,7 +65,7 @@ export const userPut = async (req, res) =>{
 }
 
 export const userDelete = async (req, res) =>{
-
+    //localhost:8000/users/:10
     const { id } = req.params
 
     //-- borrado fisico

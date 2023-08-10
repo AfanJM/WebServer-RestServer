@@ -1,19 +1,17 @@
 import { Router } from "express";
 
-import {check} from 'express-validator'
+import { check } from 'express-validator'
 
-import { validations } from "../middlewares/validations.js";
+import middlewares from '../middlewares/index.js'
 
-import { isRolValidate } from "../helpers/existRole.js";
+import helpers from "../helpers/index.js";
 
-import { existsMail } from "../helpers/exists-mail.js";
-
-import { existUserById } from '../helpers/existUserById.js'
-
-import { userDelete
-        ,userGet, 
-         userPost, 
-         userPut } from "../controller/user.controller.js";
+import {
+        userDelete
+        , userGet,
+        userPost,
+        userPut
+} from "../controller/user.controller.js";
 
 
 const router = Router()
@@ -24,40 +22,38 @@ router.post('/user', [
 
         check('name').not().isEmpty().withMessage('El nombre es obligatorio'),
 
-        check('password').isLength({min: 6}).withMessage('Debe contener al menos 6 caracteres'),
+        check('password').isLength({ min: 6 }).withMessage('Debe contener al menos 6 caracteres'),
 
         check('mail').isEmail().withMessage('Debe ser un formato valido'),
 
-        check('mail').custom( existsMail ),
+        check('mail').custom(helpers.existsMail),
 
         //check('role').isIn(['USER_ROLE', 'ADMIN_ROLE']).withMessage('No es un rol permitido')
-        
-        //validamos los roles en la base de datos usando un custom
-        check('role').custom( isRolValidate ),
 
-        
-], validations, userPost )
+        //validamos los roles en la base de datos usando un custom
+        check('role').custom(helpers.isRolValidate),
+
+
+], middlewares.validations, userPost)
 
 router.put('/user/:id', [
 
-        check('id')
-        .isMongoId().withMessage('No es un id valido'),
+        check('id').isMongoId().withMessage('No es un id valido'),
 
-        check('id').custom( existUserById ),
+        check('id').custom(helpers.existUserById),
 
-        check('role').custom( isRolValidate )
+        check('role').custom(helpers.isRolValidate)
 
 
-],validations , userPut)
+], middlewares.validations, userPut)
 
-router.delete('/user/:id',[
+router.delete('/user/:id', middlewares.validateJwt,  middlewares.validateRoleAdmin,middlewares.validateRoles('VENTAS_ROLE', 'ADMIN_ROLE'), [
 
-        check('id')
-        .isMongoId().withMessage('No es un id valido'),
+        check('id').isMongoId().withMessage('No es un id valido'),
 
-        check('id').custom( existUserById ),
+        check('id').custom(helpers.existUserById),
 
-], validations ,userDelete)
+], middlewares.validations, userDelete)
 
 
 
