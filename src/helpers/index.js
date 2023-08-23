@@ -8,9 +8,12 @@ import {existsMail} from './exists-mail.js'
 
 import {generateJWT} from './generate-jwt.js'
 
+
+
 export default {
     isRolValidate,
     existUserById,
     existsMail,
     generateJWT
+
 }

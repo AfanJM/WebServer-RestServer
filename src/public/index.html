@@ -1,11 +1,91 @@
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acesso denegado</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google sign-in</title>
 </head>
+
 <body>
-    <h1>Accesso denegado</h1>
+  <h1>Google sign-in</h1>
+  <hr>
+
+  <!-- generamos el boton para el sign-in -->
+  <!-- en data-client: ingresamos nuestra clave para el cliente -->
+  <!-- data-auto_prompt_ en false para que cuando entre no sea obligacion el sign-in -->
+  <div id="g_id_onload" data-client_id="532765137569-v87r8ekga7nmdp90ggtsfm6dkeu763dh.apps.googleusercontent.com"
+    data-auto_prompt="false" data-callback="handleCredentialResponse">
+  </div>
+
+  <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+    data-shape="rectangular" data-logo_alignment="left">
+  </div>
+
+  <!-- cerrar sesion (logout) -->
+  <button id="google_signout">
+    SignOut
+  </button>
+
+
+  <!-- script para google sign-in -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- funcion par el token -->
+  <script>
+    function handleCredentialResponse(response) {
+
+      //-- google token: ID token
+      //console.log('id_token: ',response.credential)
+
+      //hacemos un fecth con sus configuraciones, pasamos como segundo parametro POST
+
+      const body = { id_token: response.credential }
+
+      fetch('http://localhost:8030/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      })
+        .then(res => res.json())
+        .then(res => {
+          console.log(res)
+
+          //-- grabamos en el local storage
+          localStorage.setItem('mail', res.usuario.mail)
+        })
+        .catch(console.warn())
+    }
+
+    //-- manejo para cerrar sesion
+    const button = document.getElementById('google_signout')
+
+    button.onclick = () => {
+
+      console.log(google.accounts.id)
+
+      google.accounts.id.disableAutoSelect()
+
+      google.accounts.id.revoke(localStorage.getItem('mail'), done => {
+
+        //-- limpiamos el local storage y recargamos la pagina
+
+        localStorage.clear()
+
+        location.reload()
+
+      })
+
+
+
+    }
+
+
+
+  </script>
+
 </body>
+
 </html>

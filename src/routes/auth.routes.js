@@ -2,7 +2,7 @@ import {Router} from 'express'
 
 import { check } from 'express-validator'
 
-import { login } from '../controller/auth.controller.js'
+import { login, googleSignIn } from '../controller/auth.controller.js'
 
 import { validations } from '../middlewares/validations.js'
 
@@ -17,6 +17,10 @@ router.post('/login',[
     check('password', 'La password es requerida').not().isEmpty()
 
 ],validations , login)
+
+router.post('/google', [
+    check('id_token').notEmpty().withMessage('El id token es necesario')
+], validations,googleSignIn )
 
 
 
