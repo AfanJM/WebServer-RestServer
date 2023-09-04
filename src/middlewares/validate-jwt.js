@@ -26,6 +26,10 @@ export const validateJwt = async (req = request, res = response, next) =>{
 
         //-- guardamos la informacion en la requet user 
         req.user = user
+       
+        
+
+
 
         next();    
 

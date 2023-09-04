@@ -11,11 +11,13 @@ import {validations} from './validations.js'
 import {validateJwt} from './validate-jwt.js'
 
 
+
 export default {
    
     validateRoleAdmin,
     validateRoles,
     validateJwt,
     validations
+   
     
 }

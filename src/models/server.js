@@ -1,24 +1,45 @@
 import {join, dirname} from 'path'
+
 import { fileURLToPath } from 'url'
-import userRoutes from '../routes/user.routes.js'
-import authRoutes from '../routes/auth.routes.js'
+
+import Routes from '../routes/index.js'
+
 import connectDb from '../db/config.js'
+
 import dotenv from 'dotenv'
-import express from 'express'
-import cors from 'cors'
 
 dotenv.config()
+
+import express from 'express'
+
+import cors from 'cors'
+
+import fileUpload from 'express-fileupload'
 
 class server {
 
     //-- aqui llamamos todos los metodos
     constructor() {
         this.app = express()
+
         this.port = process.env.PORT
+
         this.pathPublic = join(dirname(fileURLToPath(import.meta.url)), '..')
 
-        this.usersPath = '/api'
-        this.authPath = '/api/auth'
+        //-- optimizamos los path de las rutas
+        this.paths = {
+            auth: '/api/auth',
+
+            users: '/api',
+
+            category: '/api/category',
+
+            products: '/api/products',
+
+            search: '/api/search',
+
+            upload: '/api/upload'
+        }
 
         //-- conectamos a la DB
         this.conexionBD()
@@ -39,20 +60,44 @@ class server {
 
     //-- servimos todos los middlewares
     middlewares(){
+
         this.app.use(express.json() )
+
         this.app.use(cors())
+
         this.app.use(express.static(join(this.pathPublic, 'public')))
+
+        //-- configuracion para la carga de archivo
+        this.app.use( fileUpload({
+
+            useTempFiles : true,
+            
+            tempFileDir : '/tmp/', 
+
+            createParentPath: true //-- crear carpetas
+        }));
+        
     }
 
     //--definimos las rutas que queremos
     routes() {
-        this.app.use(this.authPath, authRoutes)
-        this.app.use(this.usersPath ,userRoutes)
+        this.app.use(this.paths.upload, Routes.uploadRoutes)
+
+        this.app.use(this.paths.search,Routes.searchRoutes)
+
+        this.app.use(this.paths.products, Routes.productsRoutes)
+
+        this.app.use(this.paths.category, Routes.categoryRoutes)
+
+        this.app.use(this.paths.auth, Routes.authRoutes)
+
+        this.app.use(this.paths.users ,Routes.userRoutes)
     }
 
     //-- escuchamos el server
     listen() {
         this.app.listen(this.port, () => {
+
             console.log(`Escuchando en el puerto ${this.port}`)
         })
     }
