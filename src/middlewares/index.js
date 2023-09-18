@@ -10,6 +10,8 @@ import {validations} from './validations.js'
 
 import {validateJwt} from './validate-jwt.js'
 
+import {validaFile} from './validate-file.js'
+
 
 
 export default {
@@ -17,7 +19,6 @@ export default {
     validateRoleAdmin,
     validateRoles,
     validateJwt,
-    validations
-   
-    
+    validations,
+    validaFile
 }

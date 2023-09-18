@@ -1,5 +1,5 @@
 
-import { fileUpload, updateUpload } from '../controller/uploads.controller.js'
+import { fileUpload, updateUpload,updateUploadCloudinary, getFile } from '../controller/uploads.controller.js'
 
 import middlewares from '../middlewares/index.js'
 
@@ -11,7 +11,16 @@ import { check } from "express-validator";
 
 const router = Router()
 
-router.post('/', fileUpload)
+router.get('/:coleccion/:id', [
+
+    check('id').isMongoId().withMessage('Esta id no es valida'), 
+
+    check('coleccion').custom( c => helpers.validateColection( c, ['user', 'products']  )  )    ,
+
+], middlewares.validations, getFile )
+
+router.post('/',middlewares.validaFile, fileUpload)
+
 
 router.put('/:coleccion/:id', [
 
@@ -19,7 +28,19 @@ router.put('/:coleccion/:id', [
 
     check('coleccion').custom( c => helpers.validateColection( c, ['user', 'products']  )  )    ,
 
-], middlewares.validations,  updateUpload )
+], middlewares.validaFile, middlewares.validations ,  updateUploadCloudinary )
+
+
+// router.put('/:coleccion/:id', [
+
+//     check('id').isMongoId().withMessage('No es una id valida'),
+
+//     check('coleccion').custom( c => helpers.validateColection( c, ['user', 'products']  )  )    ,
+
+// ], middlewares.validaFile, middlewares.validations ,  updateUpload )
+
+
+
 
 
 

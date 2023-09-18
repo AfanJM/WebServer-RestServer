@@ -19,15 +19,15 @@ export const uploadFile = async (files,  validExtensions = ['png', 'jpg', 'gif']
       const cutName = upload.name.split( '.' )
   
       //-- sacamos la extension es decir PNG, JPG
-      const ext = cutName[cutName.length - 1]
+      const ext = cutName[cutName.length - 1] 
   
       if(! validExtensions.includes(ext)) {
           
           return reject(`La extension: ${ext} NO es permitida. Las permitidas son: ${validExtensions} `)
       }
   
-      //--nombre temporal para el archivo
-      const nameTemp = uuid() + '.' + ext
+      //--nombre temporal para el archivo     Taller1.txt
+      const nameTemp = uuid() + '.' + ext  
   
       //-- guardamos la foto en el carpeta upload que esta en la raiz
       const uploadPath = join(dirname(fileURLToPath(import.meta.url)),  '../uploads/', carpeta ,nameTemp)

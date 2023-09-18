@@ -24,9 +24,14 @@ class server {
 
         this.port = process.env.PORT
 
-        this.pathPublic = join(dirname(fileURLToPath(import.meta.url)), '..')
+        this.pathPublic = join(dirname(fileURLToPath(import.meta.url)), '../public')
 
-        //-- optimizamos los path de las rutas
+        this.pathImg = join(dirname(fileURLToPath(import.meta.url)), '../uploads/products')
+
+        this.pathUser = join(dirname(fileURLToPath(import.meta.url)), '../uploads/user')
+
+        this.pathNoImg = join(dirname(fileURLToPath(import.meta.url)), '../assets')
+       
         this.paths = {
             auth: '/api/auth',
 
@@ -65,7 +70,13 @@ class server {
 
         this.app.use(cors())
 
-        this.app.use(express.static(join(this.pathPublic, 'public')))
+        this.app.use(express.static( this.pathPublic ))
+
+        this.app.use(express.static(this.pathImg))
+
+        this.app.use(express.static(this.pathNoImg ))
+
+        this.app.use(express.static(   this.pathUser))
 
         //-- configuracion para la carga de archivo
         this.app.use( fileUpload({

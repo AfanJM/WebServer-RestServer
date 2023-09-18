@@ -8,7 +8,7 @@ export const validateJwt = async (req = request, res = response, next) =>{
 
     //sacamos el token de las cabeceras
     const token = req.header('Authorization')
-
+    
     if(!token) return res.status(401).json({Message: 'Usuario no autorizado - NO TOKEN'})
 
     try {
