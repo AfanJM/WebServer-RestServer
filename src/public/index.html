@@ -43,7 +43,7 @@
       // fetch de antes: http://localhost:8030/api/auth/google
       const body = { id_token: response.credential }
 
-      fetch('https://restserver-oxet.onrender.com/', {
+      fetch('http://localhost:8030/api/auth/google', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

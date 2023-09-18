@@ -69,7 +69,7 @@ class server {
         this.app.use(express.json() )
 
         this.app.use(cors({
-            origin: 'https://restserver-oxet.onrender.com/',
+            origin: '*',
             methods: 'GET, HEAD, POST, PUT, PATCH, DELETE',
             credentials: true
         })); 
