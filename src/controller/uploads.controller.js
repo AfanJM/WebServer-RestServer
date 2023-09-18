@@ -212,7 +212,7 @@ export const updateUploadCloudinary = async (req = request, res = response ) => 
     } )
 
     modelo.img = secure_url
-
+|
     await modelo.save()
   
     //-- la subimos a cloudinary

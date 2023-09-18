@@ -40,9 +40,10 @@
 
       //hacemos un fecth con sus configuraciones, pasamos como segundo parametro POST
 
+      // fetch de antes: http://localhost:8030/api/auth/google
       const body = { id_token: response.credential }
 
-      fetch('http://localhost:8030/api/auth/google', {
+      fetch('https://restserver-oxet.onrender.com/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
