@@ -198,23 +198,24 @@ export const updateUploadCloudinary = async (req = request, res = response ) => 
   
     if(modelo.img){
       
-      
       const public_id = modelo.img.split("/").pop().split(".").shift();
 
       callBackClaodinary().uploader.destroy(`nodejs-rest-api/${public_id}`)
-
+ 
+      console.log('id del archivo: ',public_id)
+  
     }
   
-    const {tempFilePath } = req.files.upload
+    let {tempFilePath } = req.files.upload
 
     const {secure_url} = await callBackClaodinary().uploader.upload(  tempFilePath, {
-      folder: 'nodejs-rest-api'
-    } )
+      folder: 'nodejs-rest-api',
+    } ); 
 
     modelo.img = secure_url
-|
+
     await modelo.save()
-  
+
     //-- la subimos a cloudinary
     res.status(200).json(modelo)
 
