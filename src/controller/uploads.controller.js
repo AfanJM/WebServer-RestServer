@@ -63,12 +63,10 @@ export const getFile = async (req = request, res = response) => {
 
   if(modelo.img){
 
-    const pathImg = join(dirname(fileURLToPath(import.meta.url)), '../uploads', coleccion, modelo.img)
-  
-    if(fs.existsSync(pathImg)){
-      
-        return res.sendFile(pathImg)
-    }
+    return res.json({
+      img: modelo.img
+    })
+
 
     
   }
